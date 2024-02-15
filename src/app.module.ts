@@ -7,6 +7,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 // import { Todo } from './todos/todo.entity';
 import {join} from 'path';
 import { UserModule } from './users/modules/user.module';
+import { TopicModule } from './topics/modules/topics.modules';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -20,11 +21,11 @@ import { UserModule } from './users/modules/user.module';
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_DATABASE'),
         entities: [join(process.cwd(), 'dist/**/*.entity.js')],
-        synchronize: false,
+        synchronize: true,
       }),
       inject: [ConfigService],
     }),
-     UserModule,
+     UserModule,TopicModule
 ],
   controllers: [AppController],
   providers: [AppService],
