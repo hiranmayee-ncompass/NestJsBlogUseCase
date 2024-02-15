@@ -1,65 +1,22 @@
-// // auth/user.service.ts
-// import { Injectable } from '@nestjs/common';
-// import { InjectRepository } from '@nestjs/typeorm';
-// import { Repository } from 'typeorm';
-// import { User } from '../entities/user.entity';
-// import { CreateUserDto } from '../dto/user.dto';
-
-// @Injectable()
-// export class UserService {
-//     constructor(
-//         @InjectRepository(User)
-//         private readonly userRepository: Repository<User>,
-//     ) {}
-
-//     async registerUser(createUserDto: CreateUserDto): Promise<User> {
-//         const { username, password, roleId } = createUserDto;
-
-//         try {
-//             // Explicitly define options for findOneOrFail
-//             const user = await this.userRepository.findOneOrFail({
-//                 where: { role: { roleid: roleId } } as any, // Use 'role' here if it's a relation in User entity
-//             });
-
-//             // Rest of your code...
-
-//             return user; // Return the user or modify the return value as needed
-//         } catch (error) {
-//             console.error(error);
-//             throw new Error('Error registering user');
-//         }
-//     }
-// }
-
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from '../dto/user.dto';
-// import { UpdateUserDto } from './dto/update-user.dto';
+
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../entities/user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
-
-  //   async create(createUserDto: CreateUserDto) {
-  //     const { username, password, roleId} = createUserDto;
-  //     const user1 = await this.userRepository.findOneBy({ username });
-  //     // const user2 = await this.userRepository.findOneBy({ password });
-  //     if (user1) {
-  //       return 'already exists !';
-  //     } else {
-  //       return this.userRepository.save(createUserDto);
-  //     }
-  //   }
 
   async create(createUserDto: CreateUserDto) {
     const { username, password } = createUserDto;
 
-    // Check if the user with the given username already exists
     const existingUser = await this.userRepository.findOneBy({ username });
 
     if (existingUser) {
@@ -70,20 +27,50 @@ export class UserService {
     const newUser = this.userRepository.create({
       username,
       password,
+
       // role: { roleid: roleId }, // Set the roleId for the new user
+
     });
 
     // Save the new user to the database
     this.userRepository.save(newUser);
-    return createUserDto
+    return createUserDto;
+  }
+
+  async findByUsernameAndPassword(
+    username: string,
+    password: string,
+  ): Promise<User | null> {
+    // Using a case-insensitive query for the username
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .where('LOWER(user.username) = LOWER(:username)', { username })
+      .andWhere('user.password = :password', { password })
+      .getOne();
+
+    return user || null;
+  }
+
+  async login(username: string, password: string): Promise<string | null> {
+    const user = await this.findByUsernameAndPassword(username, password);
+
+    if (user) {
+      // Generate a JWT token
+
+      const token = this.jwtService.sign({ sub: user.userid });
+
+      return token;
+    }
+
+    return null;
   }
 
   findAll() {
     return this.userRepository.find();
   }
 
-  findOne(id: number) {
-    return this.userRepository.findOneBy({ userid: id });
+  findOne(userName: string) {
+    return this.userRepository.findOneBy({ username: userName });
   }
 
   //   update(id: number, updateUserDto: UpdateUserDto) {
