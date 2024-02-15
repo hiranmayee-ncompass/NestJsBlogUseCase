@@ -57,7 +57,7 @@ export class UserService {
   //   }
 
   async create(createUserDto: CreateUserDto) {
-    const { username, password, roleId } = createUserDto;
+    const { username, password } = createUserDto;
 
     // Check if the user with the given username already exists
     const existingUser = await this.userRepository.findOneBy({ username });
@@ -70,7 +70,7 @@ export class UserService {
     const newUser = this.userRepository.create({
       username,
       password,
-      role: { roleid: roleId }, // Set the roleId for the new user
+      // role: { roleid: roleId }, // Set the roleId for the new user
     });
 
     // Save the new user to the database
