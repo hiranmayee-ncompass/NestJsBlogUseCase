@@ -7,6 +7,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 // import { Todo } from './todos/todo.entity';
 import {join} from 'path';
 import { UserModule } from './users/modules/user.module';
+import { AuthModule } from './auth/modules/auth.module';
+import { AuthController } from './auth/auth.controller';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -24,9 +26,9 @@ import { UserModule } from './users/modules/user.module';
       }),
       inject: [ConfigService],
     }),
-     UserModule,
+     UserModule,AuthModule
 ],
-  controllers: [AppController],
+  controllers: [AppController, AuthController],
   providers: [AppService],
 })
 export class AppModule {}
