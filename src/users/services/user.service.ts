@@ -27,6 +27,9 @@ export class UserService {
     const newUser = this.userRepository.create({
       username,
       password,
+
+      // role: { roleid: roleId }, // Set the roleId for the new user
+
     });
 
     // Save the new user to the database

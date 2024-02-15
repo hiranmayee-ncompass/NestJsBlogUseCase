@@ -18,6 +18,7 @@ export class User {
   @Column({ type: 'varchar', length: 255 })
   password: string;
 
+
   @ManyToOne(() => Role)
   @JoinColumn({ name: 'roleid' })
   role: Role;
@@ -29,4 +30,19 @@ export class User {
     this.password = password;
     this.roleid = 3;
   }
+
+    @ManyToOne(() => Role)
+    @JoinColumn({ name: 'roleid' })
+    role: Role;
+
+    @Column({ default: 3 })
+    roleid: number;
+
+    constructor(username: string, password: string) {
+        this.username = username;
+        this.password = password;
+        // Set default role when creating a new User entity
+        this.roleid = 3;
+    }
+
 }
