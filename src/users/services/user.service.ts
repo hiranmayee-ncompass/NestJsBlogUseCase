@@ -33,7 +33,8 @@ export class UserService {
 
     const newUser = this.userRepository.create({
       username,
-      password: hashedPassword,
+
+      password: hashedPassword
     });
 
     this.userRepository.save(newUser);

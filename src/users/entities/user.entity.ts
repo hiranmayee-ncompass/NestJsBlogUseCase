@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 
 @Entity('users')
@@ -24,9 +18,11 @@ export class User {
 
   @Column({ default: 3 })
   roleid: number;
+
   constructor(username: string, password: string) {
     this.username = username;
     this.password = password;
+    // Set default role when creating a new User entity
     this.roleid = 3;
   }
 }
