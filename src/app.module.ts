@@ -3,9 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-// import { TodoModule } from './todos/todos.module';
-// import { Todo } from './todos/todo.entity';
-import {join} from 'path';
+import { join } from 'path';
 import { UserModule } from './users/modules/user.module';
 import { AuthModule } from './auth/modules/auth.module';
 import { AuthController } from './auth/auth.controller';
@@ -26,10 +24,10 @@ import { AuthController } from './auth/auth.controller';
       }),
       inject: [ConfigService],
     }),
-     UserModule,AuthModule
-],
+    UserModule,
+    AuthModule,
+  ],
   controllers: [AppController, AuthController],
   providers: [AppService],
 })
 export class AppModule {}
-
