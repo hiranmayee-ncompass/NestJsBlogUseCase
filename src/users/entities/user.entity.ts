@@ -31,18 +31,4 @@ export class User {
     this.roleid = 3;
   }
 
-    @ManyToOne(() => Role)
-    @JoinColumn({ name: 'roleid' })
-    role: Role;
-
-    @Column({ default: 3 })
-    roleid: number;
-
-    constructor(username: string, password: string) {
-        this.username = username;
-        this.password = password;
-        // Set default role when creating a new User entity
-        this.roleid = 3;
-    }
-
 }
