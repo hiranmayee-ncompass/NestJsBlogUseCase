@@ -9,8 +9,8 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
 
 @Module({
   imports: [
-    UserModule,
-    PassportModule.register({ defaultStrategy: 'local' }),
+    UserModule, PassportModule,
+    // PassportModule.register({ defaultStrategy: 'local' }),
 
     JwtModule.register({
       secret: 'hmkey',
@@ -19,6 +19,6 @@ import { JwtStrategy } from '../strategies/jwt.strategy';
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
-  exports: [AuthService, PassportModule, JwtModule],
+  exports: [AuthService],
 })
 export class AuthModule {}

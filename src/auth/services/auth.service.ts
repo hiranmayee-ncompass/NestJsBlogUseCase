@@ -12,6 +12,15 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async validateUser(username: string, password: string): Promise<any> {
+    const user = await this.userService.findOne(username);
+    if (user && user.password === password) {
+      const { password, ...result } = user;
+      return result;
+    }
+    return null;
+  }
+
   async signIn(loginUserDto: LoginUserDto) {
     const user = await this.userService.findOne(loginUserDto.username);
     if (user?.password !== loginUserDto.password) {
@@ -24,6 +33,13 @@ export class AuthService {
     };
     return {
       access_token: await this.jwtService.signAsync(payload),
+    };
+  }
+
+  async login(user: any) {
+    const payload = { username: user.username, roleid: user.roleid, userid: user.userid };
+    return {
+      access_token: this.jwtService.sign(payload),
     };
   }
 }

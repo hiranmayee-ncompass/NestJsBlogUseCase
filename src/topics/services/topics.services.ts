@@ -20,7 +20,7 @@ export class TopicService {
     try {
       const loggedInUserInfo = req.user;
       const { topicName, description } = createTopicDto;
-      if (loggedInUserInfo.role == 1 || loggedInUserInfo.role == 2) {
+      if (loggedInUserInfo.roleid == 1 || loggedInUserInfo.roleid == 2) {
         const ownerId = loggedInUserInfo.userid;
         const value = {
           topicName: topicName,
