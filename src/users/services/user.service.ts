@@ -22,17 +22,10 @@ export class UserService {
     if (existingUser) {
       return 'User already exists!';
     }
-
-    // Create a new user
     const newUser = this.userRepository.create({
       username,
       password,
-
-      // role: { roleid: roleId }, // Set the roleId for the new user
-
     });
-
-    // Save the new user to the database
     this.userRepository.save(newUser);
     return createUserDto;
   }
@@ -41,7 +34,6 @@ export class UserService {
     username: string,
     password: string,
   ): Promise<User | null> {
-    // Using a case-insensitive query for the username
     const user = await this.userRepository
       .createQueryBuilder('user')
       .where('LOWER(user.username) = LOWER(:username)', { username })
@@ -55,10 +47,7 @@ export class UserService {
     const user = await this.findByUsernameAndPassword(username, password);
 
     if (user) {
-      // Generate a JWT token
-
       const token = this.jwtService.sign({ sub: user.userid });
-
       return token;
     }
 
@@ -72,11 +61,6 @@ export class UserService {
   findOne(userName: string) {
     return this.userRepository.findOneBy({ username: userName });
   }
-
-  //   update(id: number, updateUserDto: UpdateUserDto) {
-  //     return this.userRepository.update(id, updateUserDto);
-  //   }
-
   remove(id: number) {
     return this.userRepository.delete(id);
   }
