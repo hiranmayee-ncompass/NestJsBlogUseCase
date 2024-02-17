@@ -30,7 +30,7 @@ import { TopicModule } from './topics/modules/topics.modules';
       inject: [ConfigService],
     }),
 
-     UserModule,AuthModule, TopicModule
+     UserModule, AuthModule, TopicModule
 
 ],
   controllers: [AppController, AuthController],
