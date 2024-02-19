@@ -3,10 +3,11 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { UserService } from '../../users/services/user.service';
 import * as crypto from 'crypto';
+import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly userService: UserService) {
+  constructor(private readonly authService: AuthService) {
     super();
   }
 
@@ -17,10 +18,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         .update(password)
         .digest('hex');
 
-      const user = await this.userService.findByUsernameAndPassword(
-        username,
-        hashedPassword,
-      );
+      // const user = await this.userService.findByUsernameAndPassword(
+      //   username,
+      //   hashedPassword,
+      // );
+
+      const user = await this.authService.validateUser(username, hashedPassword)
 
       if (!user) {
         throw new UnauthorizedException();

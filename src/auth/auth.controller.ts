@@ -12,6 +12,8 @@ import {
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UserService } from 'src/users/services/user.service';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -20,14 +22,14 @@ export class AuthController {
     private userService: UserService,
   ) {}
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @Post('/userlogin')
   signIn(@Request() req): any {
-    const token = this.authService.signIn(req.user);
+    const token = this.authService.login(req.user);
     return token;
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;
@@ -38,13 +40,13 @@ export class AuthController {
     return { message: result };
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @Patch('changerole/:userId')
   async changeUserRole(
     @Request() req,
     @Param('userId', ParseIntPipe) userId: number,
     @Body('newRoleId', ParseIntPipe) newRoleId: number,
   ) {
-    return this.userService.changeUserRole(req.user.id, userId, newRoleId);
+    return this.userService.changeUserRole(req, userId, newRoleId);
   }
 }
