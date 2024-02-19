@@ -1,15 +1,19 @@
+import { Topic } from 'src/topics/entities/topics.entity';
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('blogs')
-export class blogs {
+@Entity('blog')
+export class Blog {
     @PrimaryGeneratedColumn()
-    blogid: number;
+    blogId: number;
 
     @Column({ type: 'varchar', length: 50, unique: true })
-    name: string;
+    blogName: string;
 
     @Column({ type: 'varchar', length: 255 })
     description: string;
+
+    @Column()
+    ownerId: number;
 
     @CreateDateColumn({name: 'created_at'})
     createdAt: Date;
@@ -26,8 +30,10 @@ export class blogs {
     @Column({ type: 'text'})
     footer: string;
 
-    /* @ManyToOne(() => Topic)
-    @JoinColumn({ name: 'topicid' })
-    topic: Topic; */
+    @Column()
+    topicId: number;
 
+    @ManyToOne(() => Topic, { nullable: false })
+    @JoinColumn({ name: 'topicId' })
+    topic: Topic;
 }
