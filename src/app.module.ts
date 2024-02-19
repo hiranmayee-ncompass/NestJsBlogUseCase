@@ -3,14 +3,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
-import {join} from 'path';
+import { join } from 'path';
 import { UserModule } from './users/modules/user.module';
 
 import { AuthModule } from './auth/modules/auth.module';
 import { AuthController } from './auth/auth.controller';
 
 import { TopicModule } from './topics/modules/topics.modules';
+import { BlogModule } from './blog/modules/blog.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { TopicModule } from './topics/modules/topics.modules';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
+        type: "mysql",
         host: configService.get('DB_HOST'),
         port: +configService.get('DB_PORT'),
         username: configService.get('DB_USER'),
@@ -30,11 +30,10 @@ import { TopicModule } from './topics/modules/topics.modules';
       inject: [ConfigService],
     }),
 
-     UserModule,AuthModule, TopicModule
+     UserModule,AuthModule, TopicModule, BlogModule
 
 ],
   controllers: [AppController, AuthController],
   providers: [AppService],
 })
 export class AppModule {}
-
