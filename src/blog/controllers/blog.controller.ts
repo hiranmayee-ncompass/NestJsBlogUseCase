@@ -40,7 +40,7 @@ export class BlogController {
 
     @UseGuards(JwtAuthGuard)
     @Get("/all")
-    async findAll() {
-        return this.blogService.findAll();
+    async findAll(@Request() req) {
+        return this.blogService.findAll(req);
     }
 }
