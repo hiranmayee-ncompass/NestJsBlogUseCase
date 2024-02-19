@@ -32,7 +32,6 @@ import { TopicModule } from './topics/modules/topics.modules';
     AuthModule,
      TopicModule
   ],
-
   controllers: [AppController, AuthController],
   providers: [AppService],
 })
