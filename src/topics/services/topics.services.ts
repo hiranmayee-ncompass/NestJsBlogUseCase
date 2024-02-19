@@ -12,12 +12,16 @@ import { AssignViewerDto } from '../dto/assign-viewer.dto';
 import { AssignViewer } from '../entities/assign-viewer.entity';
 import { AssignEditorDto } from '../dto/assign-editor.dto';
 import { AssignEditor } from '../entities/assign-editor.entity';
+import { User } from 'src/users/entities/user.entity';
+import { UserService } from 'src/users/services/user.service';
 
 @Injectable()
 export class TopicService {
   constructor(
     @InjectRepository(Topic)
     private readonly topicRepository: Repository<Topic>,
+
+    private userService: UserService,
 
     @InjectRepository(AssignViewer)
     private readonly assignViewerRepository: Repository<AssignViewer>,
@@ -49,8 +53,12 @@ export class TopicService {
   async assignViewer(assignViewerDto: AssignViewerDto, req){
     try {
       const isUserAuthorized = await this.authorizingUser(assignViewerDto, req)
-      if(isUserAuthorized)
-        return this.assignViewerRepository.save(assignViewerDto)
+
+      if(isUserAuthorized){
+        await this.userService.changeUserRole(req, assignViewerDto.userId, 3)
+      }
+
+      return this.assignViewerRepository.save(assignViewerDto)
     }catch (error) {
       throw error
     }
@@ -59,8 +67,12 @@ export class TopicService {
   async assignEditor(assignEditorDto: AssignEditorDto, req){
     try {
       const isUserAuthorized = await this.authorizingUser(assignEditorDto, req)
-      if(isUserAuthorized)
-        return this.assignEditorRepository.save(assignEditorDto)
+
+      if(isUserAuthorized){
+        await this.userService.changeUserRole(req, assignEditorDto.userId, 4)
+      }
+
+      return this.assignEditorRepository.save(assignEditorDto)
 
     }catch (error) {
         throw error
@@ -68,8 +80,7 @@ export class TopicService {
   }
 
   async authorizingUser(dto: AssignViewerDto | AssignEditorDto, req){
-    const loggedInUserInfo = req.user;
-      console.log(loggedInUserInfo)
+      const loggedInUserInfo = req.user;
       const {topicId} = dto;
 
       if(loggedInUserInfo.roleid != 1 && loggedInUserInfo.roleid != 2){
@@ -86,6 +97,7 @@ export class TopicService {
       if(loggedUserId != result.ownerId){
         throw new UnauthorizedException("You cant assign viewer")
       }
+
       return true;
   }
 

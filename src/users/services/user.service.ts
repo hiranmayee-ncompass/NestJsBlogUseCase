@@ -55,26 +55,19 @@ export class UserService {
     newRoleId: number,
   ): Promise<string> {
     try {
-      //console.log('Logged In User ID:', req.user.userid);
       const loggedInUserId = req.user.userid
-      // Log in user retrieval
       const loggedInUser =
         await this.getUserWithRelations(loggedInUserId).getOne();
-      //console.log('Logged In User:', loggedInUser);
 
       if (loggedInUser && loggedInUser.role && loggedInUser.role.roleid === 1) {
-        // User to change retrieval
         const userToChange =
           await this.getUserWithRelations(userIdToChange).getOne();
 
-        console.log('User To Change:', userToChange);
-
-        if (userToChange) {
-          userToChange.role = null;
+        if (userToChange) {          
+          userToChange.role.roleid = newRoleId;
           userToChange.roleid = newRoleId;
 
           await this.userRepository.save(userToChange);
-
           return 'Role changed successfully';
         } else {
           throw new NotFoundException('User to change not found');
@@ -83,7 +76,6 @@ export class UserService {
         throw new UnauthorizedException('Not authorized to change roles');
       }
     } catch (error) {
-      console.error('Error in changeUserRole:', error);
       throw error; // Rethrow the error for NestJS to handle
     }
   }

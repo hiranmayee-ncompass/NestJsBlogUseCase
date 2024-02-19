@@ -39,6 +39,7 @@ export class AuthController {
   getProfile(@Request() req) {
     return req.user;
   }
+  
   @Post('create-superadmin')
   async createSuperAdmin() {
     const result = await this.userService.createSuperAdmin();

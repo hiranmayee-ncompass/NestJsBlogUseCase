@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 
 @Entity('assign_editor')
-@Unique(['topicId', 'editorId'])
+@Unique(['topicId', 'userId'])
 export class AssignEditor {
     @PrimaryGeneratedColumn()
     id:number
@@ -11,5 +11,5 @@ export class AssignEditor {
     topicId: number;
 
     @Column()
-    editorId: number;
+    userId: number;
 }

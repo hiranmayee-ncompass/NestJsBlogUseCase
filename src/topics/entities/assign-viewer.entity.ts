@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 
 @Entity('assign_viewer')
-@Unique(['topicId', 'viewerId'])
+@Unique(['topicId', 'userId'])
 export class AssignViewer {
     @PrimaryGeneratedColumn()
     id:number
@@ -11,5 +11,5 @@ export class AssignViewer {
     topicId: number;
 
     @Column()
-    viewerId: number;
+    userId: number;
 }
