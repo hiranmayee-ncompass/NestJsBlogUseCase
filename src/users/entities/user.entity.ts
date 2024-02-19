@@ -25,4 +25,5 @@ export class User {
     // Set default role when creating a new User entity
     this.roleid = 3;
   }
+
 }

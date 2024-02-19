@@ -18,11 +18,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         .update(password)
         .digest('hex');
 
-      // const user = await this.userService.findByUsernameAndPassword(
-      //   username,
-      //   hashedPassword,
-      // );
-
       const user = await this.authService.validateUser(username, hashedPassword)
 
       if (!user) {

@@ -41,30 +41,6 @@ export class UserService {
     return createUserDto;
   }
 
-  // async findByUsernameAndPassword(
-  //   username: string,
-  //   password: string,
-  // ): Promise<User | null> {
-  //   const user = await this.userRepository
-  //     .createQueryBuilder('user')
-  //     .where('LOWER(user.username) = LOWER(:username)', { username })
-  //     .andWhere('user.password = :password', { password })
-  //     .getOne();
-
-  //   return user || null;
-  // }
-
-  // async login(username: string, password: string): Promise<string | null> {
-  //   const user = await this.findByUsernameAndPassword(username, password);
-
-  //   if (user) {
-  //     const token = this.jwtService.sign({ sub: user.userid });
-
-  //     return token;
-  //   }
-
-  //   return null;
-  // }
 
   private getUserWithRelations(userId: number): SelectQueryBuilder<User> {
     return this.userRepository
